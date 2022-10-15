@@ -1,5 +1,5 @@
 import { Model, DataTypes,
-    InferAttributes, InferCreationAttributes } from "sequelize";
+    InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 import sequelize from "../config/config";
 
 
@@ -16,8 +16,9 @@ export interface User {
 //     // declare password: string;
 //     // declare nickname: string | undefined;
 // }
+
 class Users extends Model<InferAttributes<Users>, InferCreationAttributes<Users>> {
-    userId?: number;
+    declare userId: CreationOptional<number>;
     declare username: string;
     declare password: string;
     declare nickname: string;
@@ -35,7 +36,7 @@ Users.init({
         unique: true,
     },
     password: {
-        type: DataTypes.STRING(40),
+        type: DataTypes.STRING(128),
         allowNull: false,
     },
     nickname: {

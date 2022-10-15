@@ -1,10 +1,10 @@
 import { Model, DataTypes,
-    InferAttributes, InferCreationAttributes, ForeignKey } from "sequelize";
+    InferAttributes, InferCreationAttributes, ForeignKey, CreationOptional } from "sequelize";
 import sequelize from "../config/config";
 
 
 class Posts extends Model<InferAttributes<Posts>, InferCreationAttributes<Posts>> {
-    postId?: number;
+    declare postId: CreationOptional<number>;
     declare userId: ForeignKey<number>;
     declare title: string;
     declare content: string;
