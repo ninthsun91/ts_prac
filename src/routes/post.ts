@@ -1,52 +1,16 @@
 import { Router } from "express";
-import Posts from "../database/models/post";
-import Users from "../database/models/user";
+import Post from "../controllers/post";
 
 
 const router = Router();
 
 
-interface Post {
-    userId: number;
-    title: string;
-    content: string;
-}
-
 router.route("/")
-    .get(async(req, res, next)=>{
-        console.log("GET POST");
+    .get(Post.allPosts)
+    .post(Post.writePost);
 
-        const postList = await Posts.findAll({
-            include: Users
-        });
-
-        res.json({
-            postList
-        });
-    })
-    .post(async(req, res, next)=>{
-        console.log("POST POST");
-
-        const { userId } = req.cookies;
-        const { title, content } = req.body;
-        const post: Post = { userId, title, content };
-        console.log(post);
-
-        try {
-            const result = await Posts.create(post);
-            console.log(result);
-    
-            res.json({
-                message: "SUCCESS",
-                result
-            });
-            
-        } catch (error: any) {
-            res.json({
-                message: error.message
-            });
-        }
-    });
+router.route("/:postId")
+    .get(Post.findPost);
 
 
 export default router;
