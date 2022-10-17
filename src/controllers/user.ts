@@ -5,19 +5,20 @@ import bcrypt from "bcrypt";
 import env from "../config.env";
 
 
-interface User {
-    userId?: number;
-    username: string;
-    password: string;
-    nickname: string;
-    createdAt?: string;
-    updatedAt?: string;
-}
-
 interface Payload {
     userId: number;
     username: string;
 }
+
+interface User extends Payload {
+    // userId: number;
+    // username: string;
+    password: string;
+    nickname: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 
 
 export default {
@@ -35,7 +36,7 @@ export default {
         console.log("SIGNUP CONTROLLER");
 
         const { username, password, nickname } = req.body;
-        const user: User = {
+        const user: Partial<User> = {
             username, 
             password: await bcrypt.hash(password, 10),
             nickname
@@ -65,8 +66,8 @@ export default {
             throw new Error("아이디, 비밀번호가 잘못되었습니다")
         }
 
-        const payload: Payload = {
-            userId: user.userId!,
+        const payload: Partial<User> = {
+            userId: user.userId,
             username: user.username,
         }
         const token = jwt.sign(payload, env.JWT_KEY, {
